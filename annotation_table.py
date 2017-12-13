@@ -1,17 +1,10 @@
-from string import translate, maketrans
-import sys, vcf, re
-from Bio import SeqIO
-from operator import itemgetter, attrgetter
 from pysam import Tabixfile
-from ness_vcf import ness_vcf #pi_from_AF, consensus_sequence, indel, AF2pi, AF1
-from itertools import permutations
-from collections import Counter, OrderedDict
 
 
 #########################################################################################################################################
 def reverse_complement(sequence):
-	return str(sequence)[::-1].translate(maketrans('ACGTNRYKMWS?X.-BDHV', 'TGCANYRMKWS?X.-VHDB'))
-
+	t = dict(zip('ACGTNRYKMWS?X.-BDHV', 'TGCANYRMKWS?X.-VHDB') )
+	return "".join([t[b] for b in str(sequence)[::-1]])
 ############################################################################################################################################
 class annotation_line(object):
 	"""
@@ -49,7 +42,9 @@ class annotation_line(object):
 		self.FPKM, \
 		self.rho, \
 		self.FAIRE, \
-		self.recombination = self.line.split('\t')
+		self.recombination, \
+		self.mutability, \
+		self.quebec_alleles = self.line.split('\t')
 		self.position = int(self.position)
 
 
@@ -94,7 +89,9 @@ class annotation_table_position(object):
 		self.FPKM, \
 		self.rho, \
 		self.FAIRE, \
-		self.recombination = self.line.split('\t')
+		self.recombination, \
+		self.mutability, \
+		self.quebec_alleles = self.line.split('\t')
 		self.position = int(self.position)
 		annotation_table.close()
 	
@@ -130,7 +127,9 @@ class annotation_table_position(object):
 		self.FPKM, \
 		self.rho, \
 		self.FAIRE, \
-		self.recombination]])
+		self.recombination, \
+		self.mutability, \
+		self.quebec_alleles]])
 		return o_string
 
 ############################################################################################################################################

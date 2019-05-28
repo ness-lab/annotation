@@ -15,7 +15,7 @@ class GFF_line:
 		self.line = l
 	def attribute_dict(self, attributes, info_delimiter=";", info_field_delimiter = '='): ###this is fragile
 		d = OrderedDict()
-		attributes= attributes.strip(info_delimiter)
+		attributes = attributes.strip(info_delimiter)
 		for i in [x.strip() for x in re.split(info_delimiter, attributes)]:
 			if len(i)>0:
 				field = re.split(info_field_delimiter, i)[0]
